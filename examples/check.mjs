@@ -12,33 +12,36 @@ const proxy = {
 };
 
 const browser = await chromium.launch({ proxy });
-const context = await browser.newContext({ recordHar: { path: "check.har" } });
-const page = await context.newPage();
+try {
+  const context = await browser.newContext({ recordHar: { path: "check.har" } });
+  const page = await context.newPage();
 
-// Preflight: record the exit the ad server will see before loading the target.
-const exit = await (await page.goto("https://httpbin.org/ip")).json();
+  // Preflight: record the exit the ad server will see before loading the target.
+  const exit = await (await page.goto("https://httpbin.org/ip")).json();
 
-const navigations = [];
-page.on("framenavigated", (frame) => {
-  if (frame === page.mainFrame()) navigations.push(frame.url());
-});
+  const navigations = [];
+  page.on("framenavigated", (frame) => {
+    if (frame === page.mainFrame()) navigations.push(frame.url());
+  });
 
-const response = await page.goto(url, { waitUntil: "networkidle" });
-const httpRedirects = [];
-for (let request = response?.request(); request; request = request.redirectedFrom()) {
-  httpRedirects.unshift(request.url());
+  const response = await page.goto(url, { waitUntil: "networkidle" });
+  const httpRedirects = [];
+  for (let request = response?.request(); request; request = request.redirectedFrom()) {
+    httpRedirects.unshift(request.url());
+  }
+
+  await page.screenshot({ path: "check.png", fullPage: true });
+  console.log(JSON.stringify({
+    checkedAt: new Date().toISOString(),
+    exit,
+    url,
+    status: response?.status(),
+    httpRedirects,
+    navigations,
+    finalUrl: page.url(),
+  }, null, 2));
+
+  await context.close(); // writes check.har
+} finally {
+  await browser.close();
 }
-
-await page.screenshot({ path: "check.png", fullPage: true });
-console.log(JSON.stringify({
-  checkedAt: new Date().toISOString(),
-  exit,
-  url,
-  status: response?.status(),
-  httpRedirects,
-  navigations,
-  finalUrl: page.url(),
-}, null, 2));
-
-await context.close(); // writes check.har
-await browser.close();
