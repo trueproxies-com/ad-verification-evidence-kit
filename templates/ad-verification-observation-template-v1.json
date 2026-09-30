@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "method_version": "ad-verification-v1",
+  "last_reviewed": "2026-07-18",
+  "canonical_page": "https://trueproxies.com/use-cases/ad-verification/",
+  "artifact_state": "blank_template",
+  "batch_plan": {
+    "batch_id": "",
+    "campaign_reference": "",
+    "expected_market": "",
+    "schedule": "",
+    "declared_sample_size": null,
+    "route_origin": "",
+    "route_selector": "",
+    "approved_url_origin": "",
+    "approved_url_paths_json": "",
+    "success_rule": {
+      "accepted_http_status_min": null,
+      "accepted_http_status_max": null,
+      "required_final_path": "",
+      "required_creative_id": "",
+      "require_no_challenge": null
+    },
+    "challenge_indicator": {
+      "selector": "",
+      "attribute": "",
+      "expected_value": ""
+    },
+    "settling_window_ms": null,
+    "selector_observation_window_ms": null,
+    "batch_plan_limitation_notes": []
+  },
+  "observations": [],
+  "batch_summary": {
+    "summary_declared_sample_size": null,
+    "summary_observed_sample_size": null,
+    "summary_successful_observations": null,
+    "summary_success_rate": null,
+    "summary_challenge_tested_observations": null,
+    "summary_challenge_observed_observations": null,
+    "summary_challenge_test_coverage": null,
+    "summary_challenge_rate": null,
+    "summary_failed_observations": null,
+    "batch_summary_limitation_notes": []
+  }
+}
